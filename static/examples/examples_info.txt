@@ -1,0 +1,25 @@
+ErosionWatch Example Images
+==================================================
+
+These images demonstrate different erosion scenarios for testing the analysis system.
+
+• location_1_low_erosion.jpg
+  Risk Level: Low
+  Description: Low erosion example - minimal soil loss
+  Expected Analysis: ~80mm exposed pin
+
+• location_2_medium_erosion.jpg
+  Risk Level: Medium
+  Description: Medium erosion example - moderate intervention needed
+  Expected Analysis: ~150mm exposed pin
+
+• location_3_high_erosion.jpg
+  Risk Level: High
+  Description: High erosion example - urgent action required
+  Expected Analysis: ~250mm exposed pin
+
+Usage Instructions:
+1. Download one or more example images
+2. Upload them to the ErosionWatch analysis system
+3. Review the automated measurements and recommendations
+4. Use these as a baseline to understand the system capabilities

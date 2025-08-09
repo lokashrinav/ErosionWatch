@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ErosionWatch - Soil Erosion Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f8faf9;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: #27ae60;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 0;
+            border-bottom: 4px solid #229954;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .subtitle {
+            font-size: 0.95em;
+            opacity: 0.9;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            background: white;
+            border: 2px solid #ccc;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .content-section {
+            padding: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #333;
+        }
+
+        .section-header h2 {
+            color: #333;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .section-icon {
+            display: none;
+        }
+
+        .drop-zone {
+            border: 2px dashed #95a5a6;
+            background: #fcfcfc;
+            padding: 3rem 2rem;
+            margin: 1.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #27ae60;
+            background: #f8fff8;
+        }
+
+        .drop-zone-content {
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .drop-zone h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .drop-zone p {
+            color: #7f8c8d;
+            margin-bottom: 1.5rem;
+            font-size: 0.95em;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border: 1px solid #27ae60;
+        }
+
+        .upload-btn:hover {
+            background: #229954;
+        }
+
+        .file-preview {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .file-list {
+            background: #f8faf9;
+            border: 1px solid #e1e8ed;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: white;
+            border: 1px solid #e1e8ed;
+        }
+
+        .file-icon {
+            color: #27ae60;
+            margin-right: 0.75rem;
+            font-size: 1.1em;
+        }
+
+        .file-info {
+            flex-grow: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .file-size {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-top: 2px;
+        }
+
+        .remove-file {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .process-btn {
+            background: #27ae60;
+            color: white;
+            border: 1px solid #27ae60;
+            padding: 0.875rem 2rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            transition: background 0.2s ease;
+            display: none;
+            width: 100%;
+        }
+
+        .process-btn:hover {
+            background: #229954;
+        }
+
+        .instructions {
+            background: #f8faf9;
+            border-left: 4px solid #27ae60;
+            padding: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .instructions ul {
+            color: #34495e;
+            margin-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .instructions strong {
+            color: #2c3e50;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .requirement-item {
+            background: #f8f8f8;
+            border: 2px solid #ddd;
+            padding: 15px;
+        }
+
+        .requirement-item h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .requirement-item p {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .alerts {
+            padding: 0 2rem 2rem 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: none;
+            border: 1px solid;
+        }
+
+        .alert.error {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+            color: #c0392b;
+        }
+
+        .alert.success {
+            background: #f8fff8;
+            border-color: #27ae60;
+            border-left: 4px solid #27ae60;
+            color: #229954;
+        }
+
+        .alert.warning {
+            background: #fffbf0;
+            border-color: #f39c12;
+            border-left: 4px solid #f39c12;
+            color: #d68910;
+        }
+
+        .footer-info {
+            background: #34495e;
+            color: #bdc3c7;
+            padding: 1.5rem 2rem;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .footer-info p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .header-meta {
+                text-align: center;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .drop-zone {
+                padding: 2rem 1rem;
+            }
+            
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div>
+                <h1>
+                    <span style="font-size: 0.8em;">🌱</span>
+                    ErosionWatch
+                </h1>
+                <div class="subtitle">Soil Erosion Analysis System</div>
+            </div>
+            <div class="header-meta">
+                <div>Agricultural Research Platform</div>
+                <div>Version 1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="content-section instructions">
+            <div class="section-header">
+                <div class="section-icon">i</div>
+                <h2>Analysis Guidelines</h2>
+            </div>
+            
+            <p style="margin-bottom: 1rem; color: #34495e;">
+                Take photos of your erosion areas with a ruler or pin visible. Here's how to get good measurements:
+            </p>
+            
+            <div class="requirements-grid">
+                <div class="requirement-item">
+                    <h4>Use a Reference Object</h4>
+                    <p>Put a ruler, measuring stick, or marked pin in your photo. Make sure you can see it clearly and it's standing straight up, not tilted.</p>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Good Photo Quality</h4>
+                    <p>Take clear photos with good light. Don't let shadows cover your ruler or measuring stick. Try to keep the camera level.</p>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Multiple Spots</h4>
+                    <p>Take photos from different parts of your farm where you see erosion. If you have a GPS, note the locations.</p>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>File Types</h4>
+                    <p>JPG, PNG, TIFF, or BMP photos work. Keep files under 16MB. You can upload several photos at once.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section" style="background: #f8fff8;">
+            <div class="section-header">
+                <div class="section-icon">💾</div>
+                <h2>Example Images</h2>
+            </div>
+            
+            <p style="color: #34495e; margin-bottom: 1.5rem;">
+                Download test photos to try out the system. These sample images show light, medium, and heavy erosion with measuring pins.
+            </p>
+            
+            <div class="requirements-grid">
+                <div class="requirement-item">
+                    <h4>Light Erosion Photo</h4>
+                    <p style="margin-bottom: 1rem;">Photo showing a little erosion - pin sticking out about 8cm. Should read around 80mm soil lost.</p>
+                    <a href="{{ url_for('download_example', filename='location_1_low_erosion.jpg') }}" class="upload-btn" style="display: inline-block; text-decoration: none;">
+                        Download Light Erosion Photo
+                    </a>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Medium Erosion Photo</h4>
+                    <p style="margin-bottom: 1rem;">Some erosion happening - pin showing about 15cm. Should read around 150mm lost.</p>
+                    <a href="{{ url_for('download_example', filename='location_2_medium_erosion.jpg') }}" class="upload-btn" style="display: inline-block; text-decoration: none;">
+                        Download Medium Erosion Photo
+                    </a>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Heavy Erosion Photo</h4>
+                    <p style="margin-bottom: 1rem;">Bad erosion with water channels. Pin showing 25cm, about 250mm soil washed away.</p>
+                    <a href="{{ url_for('download_example', filename='location_3_high_erosion.jpg') }}" class="upload-btn" style="display: inline-block; text-decoration: none;">
+                        Download Heavy Erosion Photo
+                    </a>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>All Test Photos</h4>
+                    <p style="margin-bottom: 1rem;">Download all three test photos plus a text file explaining what results to expect.</p>
+                    <a href="{{ url_for('download_example', filename='examples_info.txt') }}" class="upload-btn" style="display: inline-block; text-decoration: none; background: #34495e; border-color: #34495e;">
+                        Download Info File
+                    </a>
+                </div>
+            </div>
+            
+            <div style="background: #e8f4f8; padding: 1rem; margin-top: 1.5rem; border-left: 4px solid #27ae60;">
+                <p style="margin: 0 0 0.5rem 0; color: #34495e; font-size: 0.9em;">
+                    <strong>How to test:</strong> Download one of the test photos above, then upload it below to see how the analysis works. 
+                    The photos have measuring pins that the system can find and measure automatically.
+                </p>
+                <p style="margin: 0; font-size: 0.9em;">
+                    <a href="{{ url_for('examples_info') }}" style="color: #27ae60; text-decoration: none; font-weight: 500;">
+                        → View detailed examples page with specifications
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-icon">📁</div>
+                <h2>Image Upload</h2>
+            </div>
+                
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-content">
+                        <div class="upload-icon">📁</div>
+                        <h3>Select Image Files</h3>
+                        <p>Drag files here or click to browse</p>
+                        <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            Browse Files
+                        </button>
+                    </div>
+                </div>
+                
+                <input type="file" id="fileInput" name="files" class="file-input" multiple accept="image/*">
+                
+                <div class="file-preview" id="filePreview">
+                    <h3>Selected Files:</h3>
+                    <div class="file-list" id="fileList"></div>
+                    <button type="submit" class="process-btn" id="processBtn">
+                        Start Analysis
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="content-section" style="background: #f8faf9;">
+            <div class="section-header">
+                <div class="section-icon">⚙</div>
+                <h2>Analysis Capabilities</h2>
+            </div>
+            
+            <div class="requirements-grid">
+                <div class="requirement-item">
+                    <h4>Measures Soil Loss</h4>
+                    <p>Finds your ruler or pin in the photo and calculates how much soil washed away. Accurate to within a few millimeters.</p>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Shows Risk Areas</h4>
+                    <p>Colors your locations green, yellow, or red based on how bad the erosion is. Shows you where to focus your efforts.</p>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Planting Advice</h4>
+                    <p>Tells you where to plant vetiver grass or other plants to stop erosion. Gives you practical steps you can actually do.</p>
+                </div>
+                
+                <div class="requirement-item">
+                    <h4>Save Your Results</h4>
+                    <p>Download PDF reports and data files to keep records or share with extension agents or cooperatives.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="alerts" id="alerts">
+            <!-- Flash messages will appear here -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert error">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="footer-info">
+            <p><strong>ErosionWatch v1.0</strong> - A simple tool to measure soil erosion from photos. 
+            Takes pictures with rulers or pins and tells you how much soil washed away and where to plant to stop more erosion.</p>
+        </div>
+    </div>
+
+    <script>
+        // File handling variables
+        let selectedFiles = [];
+        
+        // DOM elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const fileList = document.getElementById('fileList');
+        const processBtn = document.getElementById('processBtn');
+        const uploadForm = document.getElementById('uploadForm');
+
+        // Drag and drop functionality
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // File input change event
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // Handle selected files
+        function handleFiles(files) {
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/tiff', 'image/bmp'];
+            const maxSize = 16 * 1024 * 1024; // 16MB
+            
+            Array.from(files).forEach(file => {
+                if (!validTypes.includes(file.type)) {
+                    showAlert(`File "${file.name}" is not a supported image format.`, 'error');
+                    return;
+                }
+                
+                if (file.size > maxSize) {
+                    showAlert(`File "${file.name}" is too large. Maximum size is 16MB.`, 'error');
+                    return;
+                }
+                
+                // Check if file already selected
+                if (selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    showAlert(`File "${file.name}" is already selected.`, 'warning');
+                    return;
+                }
+                
+                selectedFiles.push(file);
+            });
+            
+            updateFilePreview();
+        }
+
+        // Update file preview
+        function updateFilePreview() {
+            if (selectedFiles.length === 0) {
+                filePreview.style.display = 'none';
+                return;
+            }
+
+            filePreview.style.display = 'block';
+            fileList.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                fileItem.innerHTML = `
+                    <div class="file-icon">🖼️</div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <button type="button" class="remove-file" onclick="removeFile(${index})">×</button>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+
+            processBtn.style.display = selectedFiles.length > 0 ? 'block' : 'none';
+        }
+
+        // Remove file from selection
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFilePreview();
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'error') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${type}`;
+            alertDiv.textContent = message;
+            alertDiv.style.display = 'block';
+            
+            const alertsContainer = document.getElementById('alerts');
+            alertsContainer.appendChild(alertDiv);
+            
+            // Auto-remove alert after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Form submission
+        uploadForm.addEventListener('submit', (e) => {
+            if (selectedFiles.length === 0) {
+                e.preventDefault();
+                showAlert('Please select at least one image file.', 'error');
+                return;
+            }
+
+            // Update file input with selected files
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            fileInput.files = dt.files;
+
+            // Show loading state
+            processBtn.textContent = 'Processing...';
+            processBtn.disabled = true;
+        });
+
+        // Auto-hide flash messages
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.display = 'block';
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

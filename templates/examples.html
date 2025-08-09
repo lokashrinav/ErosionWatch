@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ErosionWatch - Example Images</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f8faf9;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #27ae60;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 0;
+            border-bottom: 4px solid #229954;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .subtitle {
+            font-size: 0.95em;
+            opacity: 0.9;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            background: white;
+            border: 1px solid #e1e8ed;
+            margin-top: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            padding: 2rem;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .section-header h2 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: #27ae60;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .example-card {
+            border: 1px solid #e1e8ed;
+            background: white;
+            overflow: hidden;
+        }
+
+        .example-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .example-header h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2em;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-badge.low {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .risk-badge.medium {
+            background: #fef5e7;
+            color: #f39c12;
+        }
+
+        .risk-badge.high {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        .example-body {
+            padding: 1rem;
+        }
+
+        .example-body p {
+            margin-bottom: 1rem;
+            color: #34495e;
+        }
+
+        .specs-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .specs-list li {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .specs-list li:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .spec-value {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .download-btn {
+            background: #27ae60;
+            color: white;
+            border: 1px solid #27ae60;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: background 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background: #229954;
+        }
+
+        .download-btn.secondary {
+            background: #34495e;
+            border-color: #34495e;
+        }
+
+        .usage-instructions {
+            background: #f8faf9;
+            padding: 1.5rem;
+            border-left: 4px solid #27ae60;
+            margin-top: 2rem;
+        }
+
+        .usage-instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .usage-instructions ol {
+            color: #34495e;
+            margin-left: 1.5rem;
+        }
+
+        .usage-instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            color: #27ae60;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .header-meta {
+                text-align: center;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .examples-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div>
+                <h1>
+                    <span style="font-size: 0.8em;">🌱</span>
+                    ErosionWatch Examples
+                </h1>
+                <div class="subtitle">Demonstration Images & Test Cases</div>
+            </div>
+            <div class="header-meta">
+                <div>Demo Dataset</div>
+                <div>{{ examples|length }} Example Images</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-icon">ℹ</div>
+                <h2>About the Examples</h2>
+            </div>
+            
+            <p style="color: #34495e; margin-bottom: 1.5rem;">
+                These are sample photos created to show different amounts of erosion that the system can measure. 
+                Each photo has measuring pins with marks and rulers so you can test how the analysis works.
+            </p>
+            
+            <a href="{{ url_for('index') }}" class="back-link">
+                ← Back to Analysis System
+            </a>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-icon">📁</div>
+                <h2>Example Images</h2>
+            </div>
+            
+            <div class="examples-grid">
+                {% for example in examples %}
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3>{{ example.title }}</h3>
+                        <span class="risk-badge {{ example.risk_level|lower }}">{{ example.risk_level }} Risk</span>
+                    </div>
+                    <div class="example-body">
+                        <p>{{ example.description }}</p>
+                        
+                        <ul class="specs-list">
+                            <li>
+                                <span class="spec-label">Expected Erosion:</span>
+                                <span class="spec-value">{{ example.expected_mm }}</span>
+                            </li>
+                            <li>
+                                <span class="spec-label">Risk Classification:</span>
+                                <span class="spec-value">{{ example.risk_level }}</span>
+                            </li>
+                            <li>
+                                <span class="spec-label">Recommendation:</span>
+                                <span class="spec-value">{{ example.recommendation }}</span>
+                            </li>
+                        </ul>
+                        
+                        <a href="{{ url_for('download_example', filename=example.filename) }}" class="download-btn">
+                            Download {{ example.title }}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="{{ url_for('download_example', filename='examples_info.txt') }}" class="download-btn secondary" style="max-width: 300px;">
+                    📄 Download Complete Documentation
+                </a>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-icon">🔧</div>
+                <h2>How to Use Examples</h2>
+            </div>
+            
+            <div class="usage-instructions">
+                <h3>Testing Procedure</h3>
+                <ol>
+                    <li><strong>Download Images:</strong> Click the download buttons above to save example images to your device</li>
+                    <li><strong>Return to Analysis:</strong> Go back to the main ErosionWatch interface</li>
+                    <li><strong>Upload Examples:</strong> Use the drag-and-drop upload area to select the downloaded images</li>
+                    <li><strong>Review Results:</strong> Compare the automated analysis results with the expected values listed above</li>
+                    <li><strong>Interpret Recommendations:</strong> Examine the generated risk maps and planting suggestions</li>
+                    <li><strong>Export Reports:</strong> Test the PDF and CSV export functionality using the analysis results</li>
+                </ol>
+            </div>
+            
+            <div style="background: #e8f4f8; padding: 1.5rem; margin-top: 1.5rem; border-left: 4px solid #27ae60;">
+                <p style="margin: 0; color: #34495e;">
+                    <strong>Note:</strong> These synthetic images are designed to demonstrate system capabilities. 
+                    In actual field use, photo quality, lighting conditions, and reference object positioning will affect measurement accuracy. 
+                    Always follow the analysis guidelines for optimal results.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-section" style="background: #34495e; color: white; text-align: center;">
+            <p style="margin-bottom: 1.5rem; opacity: 0.9;">
+                Ready to test ErosionWatch? Download the examples and start analyzing!
+            </p>
+            <a href="{{ url_for('index') }}" class="download-btn" style="background: #27ae60; border-color: #27ae60; max-width: 300px;">
+                Start Analysis System
+            </a>
+        </div>
+    </div>
+</body>
+</html>
